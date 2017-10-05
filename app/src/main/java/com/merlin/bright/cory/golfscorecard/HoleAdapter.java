@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -14,6 +15,11 @@ import android.widget.TextView;
 public class HoleAdapter extends BaseAdapter {
     private Hole[] mHoles;
     private Context mContext;
+
+    public HoleAdapter(Context context, Hole[] holes) {
+        mHoles = holes;
+        mContext = context;
+    }
 
     @Override
     public int getCount() {
@@ -31,20 +37,38 @@ public class HoleAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null){
-            holder  = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.score_list_item,null);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.score_list_item, null);
             holder.holeNumberTextView = (TextView) convertView.findViewById(R.id.holeNumberTextView);
-            holder.scoreTextView= (TextView) convertView.findViewById(R.id.stokesScore);
+            holder.scoreTextView = (TextView) convertView.findViewById(R.id.stokesScore);
+            holder.addStroke = (Button) convertView.findViewById(R.id.addStrokeButton);
+            holder.subtactStroke = (Button) convertView.findViewById(R.id.subtactStrokeButton);
 
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        Hole hole = mHoles[position];
+        holder.holeNumberTextView.setText(mHoles[position].getHoleName());
+        holder.scoreTextView.setText(mHoles[position].getScore() + "");
+        holder.addStroke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int updateStroke = mHoles[position].getScore() + 1;
+                mHoles[position].setScore(updateStroke);
+                holder.scoreTextView.setText(updateStroke + "");
+            }
+        });
+        holder.subtactStroke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int updateStroke = (mHoles[position].getScore() - 1 < 0) ? 0 : mHoles[position].getScore() - 1;
+                mHoles[position].setScore(updateStroke);
+                holder.scoreTextView.setText(updateStroke+"");
+            }
+        });
 
         return convertView;
     }
@@ -52,5 +76,7 @@ public class HoleAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView holeNumberTextView;
         TextView scoreTextView;
+        Button addStroke;
+        Button subtactStroke;
     }
 }

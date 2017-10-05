@@ -5,13 +5,14 @@ package com.merlin.bright.cory.golfscorecard;
  */
 
 public class Hole {
-    int mScore;
-    int mHole;
-    String mHoleName = "Hole "+mHole+":";
+    private int mScore;
+    private int mHole;
+    private String mHoleName ;
 
-    public Hole(int score, int hole) {
+    public Hole(int hole, int score) {
         mScore = score;
         mHole = hole;
+        mHoleName = "Hole "+mHole+": ";
     }
 
     public int getScore() {
@@ -25,6 +26,8 @@ public class Hole {
     public void setHole(int hole) {
         mHole = hole;
     }
+
+    public int getHole(){ return mHole;}
 
     public String getHoleName() {
         return mHoleName;
